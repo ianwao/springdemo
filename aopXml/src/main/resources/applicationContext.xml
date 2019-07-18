@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.ianw"/>
+    <aop:config>
+        <aop:aspect id="myAspect" ref="logging">
+            <aop:pointcut id="pointcut" expression="execution(* com.ianw.controller.PayController.*(..))"/>
+            <!--xml配置-->
+            <aop:around method="aroundMethod" pointcut-ref="pointcut"/>
+            <aop:before pointcut-ref="pointcut" method="beforeAdvice"/>
+            <aop:after-returning pointcut-ref="pointcut" method="afterReturningAdvice" returning="result"/>
+            <aop:after-throwing pointcut-ref="pointcut" method="afterThrowingMethod" throwing="ex"/>
+            <aop:after pointcut-ref="pointcut" method="afterAdvice"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="person" class="com.ianw.pojo.Person">
+        <property name="age" value="20"/>
+        <property name="name" value="小明"/>
+    </bean>
+
+    <bean id="logging" class="com.ianw.log.Logging"/>
+
+</beans>
